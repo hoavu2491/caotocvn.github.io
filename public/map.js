@@ -127,7 +127,7 @@ async function loadExpresswayData() {
           // Start point circle (green)
           const startPoint = coords[0];
           L.circleMarker([startPoint[1], startPoint[0]], {
-            radius: 3,
+            radius: 2.5,
             color: '#0358ebff',
             fillColor: '#0358ebff',
             fillOpacity: 0.8,
@@ -137,7 +137,7 @@ async function loadExpresswayData() {
           // End point circle (red)
           const endPoint = coords[coords.length - 1];
           L.circleMarker([endPoint[1], endPoint[0]], {
-            radius: 3,
+            radius: 2.5,
             color: '#0358ebff',
             fillColor: '#0358ebff',
             fillOpacity: 0.8,
