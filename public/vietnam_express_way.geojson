@@ -850,6 +850,28 @@
           ]
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760525116240_d1ybacb72",
+        "name": "Cam Lâm - Vĩnh Hảo",
+        "length_km": 0,
+        "status": "Planning"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            109.0920925140381,
+            11.883603686009637
+          ],
+          [
+            108.72117519378664,
+            11.305224842251798
+          ]
+        ]
+      }
     }
   ]
 }

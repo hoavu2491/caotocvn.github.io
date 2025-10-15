@@ -433,8 +433,8 @@ document.getElementById('addRoadBtn').addEventListener('click', async function()
       geometry: {
         type: 'LineString',
         coordinates: [
+          [center.lng + 0.1, center.lat + 0.05],
           [center.lng - 0.1, center.lat - 0.05],
-          [center.lng + 0.1, center.lat + 0.05]
         ]
       }
     };
