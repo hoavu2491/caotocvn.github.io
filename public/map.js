@@ -127,14 +127,6 @@ loadAll();
 
 // Edit mode functions
 function enterEditMode(feature, layer) {
-  // Exit drawing mode if active
-  if (isDrawing) {
-    isDrawing = false;
-    document.getElementById('drawBtn').textContent = 'Draw';
-    document.getElementById('drawBtn').style.backgroundColor = '';
-    map.getContainer().style.cursor = '';
-  }
-
   // Clear any existing edit mode
   exitEditMode();
 
@@ -272,64 +264,23 @@ function exitEditMode() {
   editingFeature = null;
 }
 
-// Drawing functionality
-let isDrawing = false;
-let drawnItems = new L.FeatureGroup();
-map.addLayer(drawnItems);
-let currentPolyline = null;
-let drawnCoordinates = [];
-
-
-// Map click handler for drawing
-map.on('click', function(e) {
-  if (!isDrawing) return;
-
-  const latlng = [e.latlng.lng, e.latlng.lat];
-  drawnCoordinates.push(latlng);
-
-  if (currentPolyline) {
-    drawnItems.removeLayer(currentPolyline);
-  }
-
-  const leafletCoords = drawnCoordinates.map(coord => [coord[1], coord[0]]);
-  currentPolyline = L.polyline(leafletCoords, {
-    color: '#3498db',
-    weight: 3,
-    opacity: 0.8
-  });
-  drawnItems.addLayer(currentPolyline);
-});
-
 // Copy Coordinates button
 document.getElementById('copyBtn').addEventListener('click', function() {
-  console.log('Copy button clicked');
-  let coordinatesToCopy = [];
-  let source = '';
-
   // Check if we're in edit mode
   if (isEditMode && editingFeature) {
     const coords = editingFeature.geometry.type === 'LineString'
       ? editingFeature.geometry.coordinates
       : editingFeature.geometry.coordinates[0];
-    coordinatesToCopy = coords;
-    source = editingFeature.properties.name || 'Edited road';
-  }
-  // Otherwise check drawn coordinates
-  else if (drawnCoordinates.length > 0) {
-    coordinatesToCopy = drawnCoordinates;
-    source = 'Drawn line';
-  }
-  // No coordinates available
-  else {
-    alert('No coordinates to copy. Draw on the map or edit a road first.', 'error');
-    return;
-  }
+    const source = editingFeature.properties.name || 'Edited road';
+    const coordinatesText = JSON.stringify(coords, null, 2);
 
-  const coordinatesText = JSON.stringify(coordinatesToCopy, null, 2);
-
-  navigator.clipboard.writeText(coordinatesText).then(() => {
-    alert(`Coordinates from "${source}" copied to clipboard!`, 'success');
-  }).catch(err => {
-    alert('Failed to copy coordinates. Check console for details.', 'error');
-  });
+    navigator.clipboard.writeText(coordinatesText).then(() => {
+      showInfoMessage(`Coordinates from "${source}" copied to clipboard!`, 'success');
+    }).catch(err => {
+      console.error('Failed to copy coordinates:', err);
+      showInfoMessage('Failed to copy coordinates. Check console for details.', 'error');
+    });
+  } else {
+    showInfoMessage('No road being edited. Click a road to edit it first.', 'error');
+  }
 });
