@@ -42,8 +42,8 @@
 </head>
 <body>
     <div class="info-panel">
-        <h3>Highway Map</h3>
-        <p>Interactive map with custom markers</p>
+        <h3>Vietnam Map</h3>
+        <p>Province boundaries</p>
     </div>
 
     <div id="map"></div>
@@ -54,8 +54,8 @@
             crossorigin=""></script>
 
     <script>
-        // Initialize the map
-        const map = L.map('map').setView([10.8231, 106.6297], 13);
+        // Initialize the map centered on Vietnam
+        const map = L.map('map').setView([16.0, 107.0], 6);
 
         // Add OpenStreetMap tile layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -63,70 +63,7 @@
             maxZoom: 19
         }).addTo(map);
 
-        // Custom icon for markers (optional)
-        const customIcon = L.icon({
-            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
-        });
 
-        // Add markers with popups
-        const markers = [
-            {
-                coords: [37.7749, -122.4194],
-                title: 'San Francisco',
-                description: 'Downtown San Francisco'
-            },
-            {
-                coords: [37.8044, -122.2712],
-                title: 'Oakland',
-                description: 'Oakland City Center'
-            },
-            {
-                coords: [37.7599, -122.4348],
-                title: 'Golden Gate Park',
-                description: 'Beautiful urban park'
-            },
-            {
-                coords: [37.8199, -122.4783],
-                title: 'Golden Gate Bridge',
-                description: 'Iconic suspension bridge'
-            },
-            {
-                coords: [37.7955, -122.3937],
-                title: 'Treasure Island',
-                description: 'Island in San Francisco Bay'
-            }
-        ];
-
-        // Add markers to the map
-        markers.forEach(marker => {
-            L.marker(marker.coords, { icon: customIcon })
-                .addTo(map)
-                .bindPopup(`<b>${marker.title}</b><br>${marker.description}`);
-        });
-
-        // Add a circle overlay
-        L.circle([37.7749, -122.4194], {
-            color: 'blue',
-            fillColor: '#30a3ec',
-            fillOpacity: 0.2,
-            radius: 2000
-        }).addTo(map).bindPopup('2km radius from center');
-
-        // Add a polygon (example route/area)
-        const polygon = L.polygon([
-            [37.7749, -122.4194],
-            [37.8044, -122.2712],
-            [37.7599, -122.4348]
-        ], {
-            color: 'green',
-            fillColor: '#90EE90',
-            fillOpacity: 0.3
-        }).addTo(map).bindPopup('Example highway area');
     </script>
 </body>
 </html>
