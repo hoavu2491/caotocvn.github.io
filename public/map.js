@@ -41,9 +41,28 @@ async function loadVietnamProvinces() {
 
 async function loadExpresswayData() {
   try {
-    
+    const response = await fetch("vnewdata.geojson");
+    const data = await response.json();
+
+    L.geoJSON(data, {
+      style: {
+        color: "#e74c3c",
+        weight: 3,
+        opacity: 0.8,
+      },
+      onEachFeature: (feature, layer) => {
+        if (feature.properties) {
+          const name = feature.properties.name || "Unknown Expressway";
+          const length = feature.properties.length_km || "N/A";
+          const status = feature.properties.status || "Unknown";
+          layer.bindPopup(
+            `<b>${name}</b><br>Length: ${length} km<br>Status: ${status}`
+          );
+        }
+      },
+    }).addTo(map);
   } catch (error) {
-    console.error("Error loading Vietnam boundaries:", error);
+    console.error("Error loading expressway data:", error);
   }
 }
 

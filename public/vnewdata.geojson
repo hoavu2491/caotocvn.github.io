@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hanoi - Hai Phong Expressway",
+        "highway": "motorway",
+        "length_km": 105,
+        "status": "operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [105.8342, 21.0285],
+          [106.6881, 20.8651]
+        ]
+      }
+    }
+  ]
+}
