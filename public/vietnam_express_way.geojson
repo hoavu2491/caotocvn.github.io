@@ -725,7 +725,7 @@
         "id": "d_pt",
         "name": "t1",
         "length_km": 0,
-        "status": "Planning"
+        "status": "operational"
       },
       "geometry": {
         "type": "LineString",
@@ -831,7 +831,7 @@
         "id": "road_1760524968952_9ccrpcmg7",
         "name": "Vĩnh Hảo - Phan Thiết",
         "length_km": 0,
-        "status": "Planning"
+        "status": "operational"
       },
       "geometry": {
         "type": "LineString",
@@ -857,7 +857,7 @@
         "id": "road_1760525116240_d1ybacb72",
         "name": "Cam Lâm - Vĩnh Hảo",
         "length_km": 0,
-        "status": "Planning"
+        "status": "operational"
       },
       "geometry": {
         "type": "LineString",
@@ -879,7 +879,7 @@
         "id": "road_1760525296490_m1jyoudna",
         "name": "Nha Trang - Cam Lâm",
         "length_km": 0,
-        "status": "Planning"
+        "status": "operational"
       },
       "geometry": {
         "type": "LineString",
@@ -945,7 +945,7 @@
         "id": "road_1760525449004_veudob9sb",
         "name": "Vân Phong - Nha Trang",
         "length_km": 0,
-        "status": "Planning"
+        "status": "operational"
       },
       "geometry": {
         "type": "LineString",
@@ -991,7 +991,7 @@
         "id": "road_1760525610918_cdy6gin9o",
         "name": "Chí Thạnh - Vân Phong",
         "length_km": 0,
-        "status": "Planning"
+        "status": "operational"
       },
       "geometry": {
         "type": "LineString",
@@ -1021,7 +1021,7 @@
         "id": "road_1760525711428_i1p4bw1m3",
         "name": "Quy Nhơn - Chí Thạnh",
         "length_km": 0,
-        "status": "Planning"
+        "status": "operational"
       },
       "geometry": {
         "type": "LineString",
