@@ -23,15 +23,15 @@ async function loadVietnamProvinces() {
         fillOpacity: 0.1,
       },
       onEachFeature: (feature, layer) => {
-        // if (feature.properties) {
-        //   const name =
-        //     feature.properties.Name ||
-        //     feature.properties.name ||
-        //     feature.properties.Name_VI ||
-        //     feature.properties.Name_EN ||
-        //     "Unknown";
-        //   layer.bindPopup(`<b>${name}</b>`);
-        // }
+        if (feature.properties) {
+          const name =
+            feature.properties.Name ||
+            feature.properties.name ||
+            feature.properties.Name_VI ||
+            feature.properties.Name_EN ||
+            "Unknown";
+          layer.bindPopup(`<b>${name}</b>`);
+        }
       },
     }).addTo(map);
   } catch (error) {
