@@ -149,7 +149,7 @@ function enterEditMode(feature, layer) {
   const leafletCoords = coords.map(coord => [coord[1], coord[0]]);
   editPolyline = L.polyline(leafletCoords, {
     color: '#3498db',
-    weight: 4,
+    weight: 8,
     opacity: 0.8
   }).addTo(map);
 
