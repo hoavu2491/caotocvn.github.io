@@ -44,7 +44,7 @@
     </style>
   </head>
   <body>
-    <div class="info-panel">
+    <div class="info-panel" id="info-panel">
       <h3>Vietnam Map</h3>
       <p>Province boundaries</p>
       <label>
@@ -57,6 +57,8 @@
         <button id="clearBtn" style="margin-bottom: 5px; width: 100%;">Clear</button>
         <button id="copyBtn" style="width: 100%;">Copy Coordinates</button>
       </div>
+
+      <div id="info-message" style="margin-top: 15px; padding: 10px; border-radius: 3px; display: none;"></div>
     </div>
 
     <div id="map"></div>

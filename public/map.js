@@ -1,6 +1,33 @@
 // Initialize the map centered on Vietnam
 const map = L.map("map").setView([16.0, 107.0], 6);
 
+// Helper function to show messages in info panel
+function showInfoMessage(message, type = 'info') {
+  const messageDiv = document.getElementById('info-message');
+  messageDiv.textContent = message;
+  messageDiv.style.display = 'block';
+
+  // Set color based on type
+  if (type === 'success') {
+    messageDiv.style.backgroundColor = '#d4edda';
+    messageDiv.style.color = '#155724';
+    messageDiv.style.border = '1px solid #c3e6cb';
+  } else if (type === 'error') {
+    messageDiv.style.backgroundColor = '#f8d7da';
+    messageDiv.style.color = '#721c24';
+    messageDiv.style.border = '1px solid #f5c6cb';
+  } else {
+    messageDiv.style.backgroundColor = '#d1ecf1';
+    messageDiv.style.color = '#0c5460';
+    messageDiv.style.border = '1px solid #bee5eb';
+  }
+
+  // Auto-hide after 3 seconds
+  // setTimeout(() => {
+  //   messageDiv.style.display = 'none';
+  // }, 3000);
+}
+
 // Add OpenStreetMap tile layer
 const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -170,7 +197,7 @@ function enterEditMode(feature, layer) {
   });
 
   // Show notification
-  alert(`Edit mode: ${feature.properties.name || 'Expressway'}\nDrag points to move\nRight-click points to remove\nClick map to exit`);
+  showInfoMessage(`Edit mode: ${feature.properties.name || 'Expressway'}. Drag points to move, right-click to remove, click map to exit.`, 'info');
 
   // Add click handler to exit edit mode
   map.once('click', function() {
@@ -197,7 +224,7 @@ function removeCoordinate(index) {
     : editingFeature.geometry.coordinates[0];
 
   if (coords.length <= 2) {
-    alert('Cannot remove - need at least 2 points for a line');
+    showInfoMessage('Cannot remove - need at least 2 points for a line', 'error');
     return;
   }
 
@@ -300,16 +327,16 @@ document.getElementById('clearBtn').addEventListener('click', function() {
 // Copy Coordinates button
 document.getElementById('copyBtn').addEventListener('click', function() {
   if (drawnCoordinates.length === 0) {
-    alert('No coordinates to copy. Draw on the map first.');
+    showInfoMessage('No coordinates to copy. Draw on the map first.', 'error');
     return;
   }
 
   const coordinatesText = JSON.stringify(drawnCoordinates, null, 2);
 
   navigator.clipboard.writeText(coordinatesText).then(() => {
-    alert('Coordinates copied to clipboard!');
+    showInfoMessage('Coordinates copied to clipboard!', 'success');
   }).catch(err => {
     console.error('Failed to copy coordinates:', err);
-    alert('Failed to copy coordinates. Check console for details.');
+    showInfoMessage('Failed to copy coordinates. Check console for details.', 'error');
   });
 });
