@@ -1,69 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Highway Map</title>
 
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-          crossorigin=""/>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
 
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+      }
 
-        #map {
-            height: 100vh;
-            width: 100%;
-        }
+      #map {
+        height: 100vh;
+        width: 100%;
+      }
 
-        .info-panel {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: white;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            z-index: 1000;
-            max-width: 250px;
-        }
+      .info-panel {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        max-width: 250px;
+      }
 
-        .info-panel h3 {
-            margin-top: 0;
-            font-size: 18px;
-        }
+      .info-panel h3 {
+        margin-top: 0;
+        font-size: 18px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="info-panel">
-        <h3>Vietnam Map</h3>
-        <p>Province boundaries</p>
+      <h3>Vietnam Map</h3>
+      <p>Province boundaries</p>
     </div>
 
     <div id="map"></div>
 
     <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-            crossorigin=""></script>
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
 
     <script>
-        // Initialize the map centered on Vietnam
-        const map = L.map('map').setView([16.0, 107.0], 6);
+      // Initialize the map centered on Vietnam
+      const map = L.map("map").setView([16.0, 107.0], 6);
 
-        // Add OpenStreetMap tile layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            maxZoom: 19
-        }).addTo(map);
+      // Add OpenStreetMap tile layer
+      // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      //     maxZoom: 19
+      // }).addTo(map);
 
-
+      // Fetch and display Vietnam province boundaries
+      fetch(
+        "https://hoanglongcao.github.io/bib/mekong%20delta%20database/vietnam_provinces.geojson"
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          L.geoJSON(data, {
+            style: {
+              color: "#2c3e50",
+              weight: 0.2,
+              fillColor: "#ecf0f1",
+              fillOpacity: 0.1,
+            },
+            onEachFeature: (feature, layer) => {
+              console.log(feature.properties);
+              if (feature.properties) {
+                const name =
+                  feature.properties.Name ||
+                  feature.properties.name ||
+                  feature.properties.Name_VI ||
+                  feature.properties.Name_EN ||
+                  "Unknown";
+                layer.bindPopup(`<b>${name}</b>`);
+              }
+            },
+          }).addTo(map);
+        })
+        .catch((error) =>
+          console.error("Error loading Vietnam boundaries:", error)
+        );
     </script>
-</body>
+  </body>
 </html>
