@@ -2,10 +2,10 @@
 const map = L.map("map").setView([16.0, 107.0], 6);
 
 // Add OpenStreetMap tile layer
-// L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-//     maxZoom: 19
-// }).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19
+}).addTo(map);
 
 // Fetch and display Vietnam province boundaries
 async function loadVietnamProvinces() {
