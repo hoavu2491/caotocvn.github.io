@@ -88,10 +88,22 @@ async function loadExpresswayData() {
     const data = await response.json();
 
     L.geoJSON(data, {
-      style: {
-        color: "#08a64aff",
-        weight: 3,
-        opacity: 1,
+      style: (feature) => {
+        // Set color based on status
+        let color = "#08a64aff"; // Default green for operational
+        const status = feature.properties.status ? feature.properties.status.toLowerCase() : '';
+
+        if (status === 'planning') {
+          color = "#ffc107"; // Yellow for planning
+        } else if (status === 'construction' || status === 'under construction') {
+          color = "#ff9800"; // Orange for construction
+        }
+
+        return {
+          color: color,
+          weight: 3,
+          opacity: 1,
+        };
       },
       onEachFeature: (feature, layer) => {
         if (feature.properties) {
