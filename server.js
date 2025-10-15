@@ -16,6 +16,49 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// API endpoint to add a new expressway
+app.post('/api/add-expressway', async (req, res) => {
+  try {
+    const { feature } = req.body;
+
+    if (!feature || !feature.properties || !feature.geometry) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid feature data'
+      });
+    }
+
+    // Read the current GeoJSON file
+    const geojsonPath = path.join(__dirname, 'public', 'vietnam_express_way.geojson');
+    const data = await fs.readFile(geojsonPath, 'utf8');
+    const geojson = JSON.parse(data);
+
+    // Add the new feature to the features array
+    geojson.features.push(feature);
+
+    // Write the updated GeoJSON back to the file
+    await fs.writeFile(
+      geojsonPath,
+      JSON.stringify(geojson, null, 2),
+      'utf8'
+    );
+
+    res.json({
+      success: true,
+      message: 'Expressway added successfully',
+      featureName: feature.properties.name
+    });
+
+  } catch (error) {
+    console.error('Error adding expressway:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to add expressway data',
+      details: error.message
+    });
+  }
+});
+
 // API endpoint to update expressway data
 app.post('/api/update-expressway', async (req, res) => {
   try {

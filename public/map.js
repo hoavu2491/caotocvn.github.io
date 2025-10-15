@@ -369,6 +369,61 @@ document.getElementById('copyBtn').addEventListener('click', function() {
   }
 });
 
+// Add Road button
+document.getElementById('addRoadBtn').addEventListener('click', async function() {
+  try {
+    showInfoMessage('Creating new road...', 'info');
+
+    // Get the center of the current map view
+    const center = map.getCenter();
+
+    // Create a default road with a simple line near the map center
+    const defaultRoad = {
+      type: 'Feature',
+      properties: {
+        name: `New Road ${Date.now()}`,
+        length_km: 0,
+        status: 'Planning'
+      },
+      geometry: {
+        type: 'LineString',
+        coordinates: [
+          [center.lng - 0.1, center.lat - 0.05],
+          [center.lng, center.lat],
+          [center.lng + 0.1, center.lat + 0.05]
+        ]
+      }
+    };
+
+    // Send the new road to the server
+    const response = await fetch('/api/add-expressway', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        feature: defaultRoad
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status} ${response.statusText}`);
+    }
+
+    await response.json();
+    showInfoMessage('New road added successfully! Reloading...', 'success');
+
+    // Reload the page to show the new road
+    setTimeout(() => {
+      location.reload();
+    }, 1500);
+
+  } catch (err) {
+    console.error('Failed to add road:', err);
+    showInfoMessage(`Failed to add road: ${err.message}`, 'error');
+  }
+});
+
 // Save button
 document.getElementById('saveBtn').addEventListener('click', async function() {
   // Check if we're in edit mode
