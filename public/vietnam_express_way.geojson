@@ -1055,7 +1055,7 @@
         "id": "road_1760525888341_meot1tf9q",
         "name": "Hoài Nhơn - Quy Nhơn",
         "length_km": 0,
-        "status": "Planning"
+        "status": "operational"
       },
       "geometry": {
         "type": "LineString",
@@ -1089,7 +1089,7 @@
         "id": "road_1760526075901_67yj10o32",
         "name": "New Road 1760526075901",
         "length_km": 0,
-        "status": "Planning"
+        "status": "operational"
       },
       "geometry": {
         "type": "LineString",
@@ -1101,6 +1101,28 @@
           [
             108.984375,
             14.41739032942046
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760526492605_zcjdrkxuq",
+        "name": "Đà Nẵng - Quãng Ngãi",
+        "length_km": 0,
+        "status": "Planning"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            108.14804077148439,
+            15.88737600990871
+          ],
+          [
+            108.74542236328126,
+            15.125158878585296
           ]
         ]
       }
