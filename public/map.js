@@ -1,5 +1,8 @@
 // Initialize the map centered on Vietnam
-const map = L.map("map").setView([16.0, 107.0], 6);
+const map = L.map("map", {
+  zoomDelta: 0.25,
+  zoomSnap: 0.25
+}).setView([16.0, 107.0], 6);
 
 // Helper function to show messages in info panel
 function showInfoMessage(message, type = 'info') {
