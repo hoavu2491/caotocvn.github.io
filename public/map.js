@@ -197,6 +197,9 @@ function enterEditMode(feature, layer) {
     editMarkers.push(marker);
   });
 
+  // Show edit controls
+  document.getElementById('edit-controls').style.display = 'block';
+
   // Show notification
   showInfoMessage(`Edit mode: ${feature.properties.name || 'Expressway'}. Click line to add point, drag points to move, right-click to remove, click map to exit.`, 'info');
 
@@ -337,6 +340,9 @@ function exitEditMode() {
     editingLayer.setStyle({ opacity: 1 });
   }
 
+  // Hide edit controls
+  document.getElementById('edit-controls').style.display = 'none';
+
   isEditMode = false;
   editingLayer = null;
   editingFeature = null;
@@ -360,5 +366,47 @@ document.getElementById('copyBtn').addEventListener('click', function() {
     });
   } else {
     showInfoMessage('No road being edited. Click a road to edit it first.', 'error');
+  }
+});
+
+// Save button
+document.getElementById('saveBtn').addEventListener('click', async function() {
+  // Check if we're in edit mode
+  if (!isEditMode || !editingFeature) {
+    showInfoMessage('No road being edited. Click a road to edit it first.', 'error');
+    return;
+  }
+
+  try {
+    showInfoMessage('Saving changes...', 'info');
+
+    // Send the updated feature to the server
+    const response = await fetch('/api/update-expressway', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        feature: editingFeature
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status} ${response.statusText}`);
+    }
+
+    await response.json();
+    showInfoMessage(`Changes saved successfully for "${editingFeature.properties.name || 'Expressway'}"!`, 'success');
+
+    // Exit edit mode after successful save
+    setTimeout(() => {
+      exitEditMode();
+      // Reload the expressway data to show the updated version
+      location.reload();
+    }, 1500);
+
+  } catch (err) {
+    console.error('Failed to save changes:', err);
+    showInfoMessage(`Failed to save: ${err.message}`, 'error');
   }
 });
