@@ -153,6 +153,12 @@ function enterEditMode(feature, layer) {
     opacity: 0.8
   }).addTo(map);
 
+  // Add click handler to polyline to insert new points
+  editPolyline.on('click', function(e) {
+    L.DomEvent.stopPropagation(e);
+    insertPointOnLine(e.latlng);
+  });
+
   // Create draggable markers for each coordinate
   coords.forEach((coord, index) => {
     // Create a custom divIcon for circular appearance
@@ -192,12 +198,84 @@ function enterEditMode(feature, layer) {
   });
 
   // Show notification
-  showInfoMessage(`Edit mode: ${feature.properties.name || 'Expressway'}. Drag points to move, right-click to remove, click map to exit.`, 'info');
+  showInfoMessage(`Edit mode: ${feature.properties.name || 'Expressway'}. Click line to add point, drag points to move, right-click to remove, click map to exit.`, 'info');
 
   // Add click handler to exit edit mode
   map.once('click', function() {
     exitEditMode();
   });
+}
+
+function insertPointOnLine(latlng) {
+  const coords = editingFeature.geometry.type === 'LineString'
+    ? editingFeature.geometry.coordinates
+    : editingFeature.geometry.coordinates[0];
+
+  // Find the closest segment to insert the point
+  let minDistance = Infinity;
+  let insertIndex = 1;
+
+  for (let i = 0; i < coords.length - 1; i++) {
+    const p1 = L.latLng(coords[i][1], coords[i][0]);
+    const p2 = L.latLng(coords[i + 1][1], coords[i + 1][0]);
+    const distance = L.LineUtil.pointToSegmentDistance(
+      L.point(latlng.lat, latlng.lng),
+      L.point(p1.lat, p1.lng),
+      L.point(p2.lat, p2.lng)
+    );
+
+    if (distance < minDistance) {
+      minDistance = distance;
+      insertIndex = i + 1;
+    }
+  }
+
+  // Insert the new coordinate
+  coords.splice(insertIndex, 0, [latlng.lng, latlng.lat]);
+
+  // Create new marker for the inserted point
+  const icon = L.divIcon({
+    className: 'edit-marker',
+    html: '<div style="width: 12px; height: 12px; background-color: #e74c3c; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>',
+    iconSize: [12, 12],
+    iconAnchor: [6, 6]
+  });
+
+  const marker = L.marker([latlng.lat, latlng.lng], {
+    icon: icon,
+    draggable: true
+  }).addTo(map);
+
+  marker.coordIndex = insertIndex;
+
+  marker.on('drag', function(e) {
+    updateCoordinatePosition(this.coordIndex, e.latlng);
+  });
+
+  marker.on('contextmenu', function(e) {
+    L.DomEvent.stopPropagation(e);
+    removeCoordinate(this.coordIndex);
+  });
+
+  marker.bindTooltip(`Point ${insertIndex + 1}<br>Right-click to remove`, {
+    permanent: false,
+    direction: 'top'
+  });
+
+  // Insert the marker at the correct position
+  editMarkers.splice(insertIndex, 0, marker);
+
+  // Update indices for all markers after the inserted one
+  editMarkers.forEach((m, i) => {
+    m.coordIndex = i;
+    m.setTooltipContent(`Point ${i + 1}<br>Right-click to remove`);
+  });
+
+  // Update the polyline
+  const leafletCoords = coords.map(coord => [coord[1], coord[0]]);
+  editPolyline.setLatLngs(leafletCoords);
+
+  showInfoMessage('New point added', 'success');
 }
 
 function updateCoordinatePosition(index, latlng) {
