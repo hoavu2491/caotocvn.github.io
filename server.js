@@ -79,8 +79,13 @@ app.post('/api/update-expressway', async (req, res) => {
     // Find and update the matching feature
     let updated = false;
     for (let i = 0; i < geojson.features.length; i++) {
-      // Match by name or other unique identifier
-      if (geojson.features[i].properties.name === feature.properties.name) {
+      // Match by ID if available, otherwise fall back to name
+      const matchById = feature.properties.id &&
+                        geojson.features[i].properties.id === feature.properties.id;
+      const matchByName = !feature.properties.id &&
+                          geojson.features[i].properties.name === feature.properties.name;
+
+      if (matchById || matchByName) {
         // Update the entire feature with the edited one
         geojson.features[i] = feature;
         updated = true;

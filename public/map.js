@@ -134,6 +134,11 @@ function enterEditMode(feature, layer) {
   editingFeature = feature;
   editingLayer = layer;
 
+  // Ensure the feature has a unique ID
+  if (!editingFeature.properties.id) {
+    editingFeature.properties.id = `road_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+  }
+
   // Get coordinates from the feature
   let coords = [];
   if (feature.geometry.type === 'LineString') {
@@ -199,6 +204,15 @@ function enterEditMode(feature, layer) {
 
   // Show edit controls
   document.getElementById('edit-controls').style.display = 'block';
+
+  // Populate the road name input field
+  const roadNameInput = document.getElementById('roadNameInput');
+  roadNameInput.value = feature.properties.name || '';
+
+  // Add event listener to update the feature name when input changes
+  roadNameInput.oninput = function(e) {
+    editingFeature.properties.name = e.target.value;
+  };
 
   // Show notification
   showInfoMessage(`Edit mode: ${feature.properties.name || 'Expressway'}. Click line to add point, drag points to move, right-click to remove, click map to exit.`, 'info');
@@ -381,6 +395,7 @@ document.getElementById('addRoadBtn').addEventListener('click', async function()
     const defaultRoad = {
       type: 'Feature',
       properties: {
+        id: `road_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
         name: `New Road ${Date.now()}`,
         length_km: 0,
         status: 'Planning'
