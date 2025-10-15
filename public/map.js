@@ -115,7 +115,7 @@ async function loadExpresswayData() {
           );
         }
 
-        // Add circles for start and end points
+        // Add circles for start and end points and road name label
         let coords = [];
         if (feature.geometry.type === 'LineString') {
           coords = feature.geometry.coordinates;
@@ -143,6 +143,19 @@ async function loadExpresswayData() {
             fillOpacity: 0.8,
             weight: 4
           }).addTo(map).bindTooltip('End', { permanent: false, direction: 'top' });
+
+          // Add road name label at the center-right of the road
+          const midIndex = Math.floor(coords.length / 2);
+          const midPoint = coords[midIndex];
+          const roadName = feature.properties.name || "Unknown Expressway";
+
+          L.marker([midPoint[1], midPoint[0]], {
+            icon: L.divIcon({
+              className: 'road-name-label',
+              html: `<div style="font-size: 12px; white-space: nowrap;">${roadName}</div>`,
+              iconAnchor: [-10, 0]
+            })
+          }).addTo(map);
         }
 
         // Add click handler to enter edit mode
