@@ -32,15 +32,15 @@ async function loadVietnamProvinces() {
         fillOpacity: 0.1,
       },
       onEachFeature: (feature, layer) => {
-        if (feature.properties) {
-          const name =
-            feature.properties.Name ||
-            feature.properties.name ||
-            feature.properties.Name_VI ||
-            feature.properties.Name_EN ||
-            "Unknown";
-          layer.bindPopup(`<b>${name}</b>`);
-        }
+        // if (feature.properties) {
+        //   const name =
+        //     feature.properties.Name ||
+        //     feature.properties.name ||
+        //     feature.properties.Name_VI ||
+        //     feature.properties.Name_EN ||
+        //     "Unknown";
+        //   layer.bindPopup(`<b>${name}</b>`);
+        // }
       },
     }).addTo(map);
   } catch (error) {
@@ -84,3 +84,75 @@ async function loadAll(){
 }
 
 loadAll();
+
+// Drawing functionality
+let isDrawing = false;
+let drawnItems = new L.FeatureGroup();
+map.addLayer(drawnItems);
+let currentPolyline = null;
+let drawnCoordinates = [];
+
+// Draw button
+document.getElementById('drawBtn').addEventListener('click', function() {
+  isDrawing = !isDrawing;
+  this.textContent = isDrawing ? 'Stop Drawing' : 'Draw';
+  this.style.backgroundColor = isDrawing ? '#e74c3c' : '';
+
+  if (isDrawing) {
+    drawnCoordinates = [];
+    currentPolyline = null;
+    map.getContainer().style.cursor = 'crosshair';
+  } else {
+    map.getContainer().style.cursor = '';
+  }
+});
+
+// Map click handler for drawing
+map.on('click', function(e) {
+  if (!isDrawing) return;
+
+  const latlng = [e.latlng.lng, e.latlng.lat];
+  drawnCoordinates.push(latlng);
+
+  if (currentPolyline) {
+    drawnItems.removeLayer(currentPolyline);
+  }
+
+  const leafletCoords = drawnCoordinates.map(coord => [coord[1], coord[0]]);
+  currentPolyline = L.polyline(leafletCoords, {
+    color: '#3498db',
+    weight: 3,
+    opacity: 0.8
+  });
+  drawnItems.addLayer(currentPolyline);
+});
+
+// Clear button
+document.getElementById('clearBtn').addEventListener('click', function() {
+  drawnItems.clearLayers();
+  drawnCoordinates = [];
+  currentPolyline = null;
+  if (isDrawing) {
+    isDrawing = false;
+    document.getElementById('drawBtn').textContent = 'Draw';
+    document.getElementById('drawBtn').style.backgroundColor = '';
+    map.getContainer().style.cursor = '';
+  }
+});
+
+// Copy Coordinates button
+document.getElementById('copyBtn').addEventListener('click', function() {
+  if (drawnCoordinates.length === 0) {
+    alert('No coordinates to copy. Draw on the map first.');
+    return;
+  }
+
+  const coordinatesText = JSON.stringify(drawnCoordinates, null, 2);
+
+  navigator.clipboard.writeText(coordinatesText).then(() => {
+    alert('Coordinates copied to clipboard!');
+  }).catch(err => {
+    console.error('Failed to copy coordinates:', err);
+    alert('Failed to copy coordinates. Check console for details.');
+  });
+});
