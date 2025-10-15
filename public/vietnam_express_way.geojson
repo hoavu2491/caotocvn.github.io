@@ -4,6 +4,7 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "d_pt_1",
         "name": "Hanoi - Hai Phong Expressway",
         "highway": "motorway",
         "length_km": 105,
@@ -322,6 +323,7 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "d_pt_2",
         "name": "Ho Chi Minh - Long Thanh - Dau Giay Expressway",
         "highway": "motorway",
         "length_km": 55,
@@ -819,6 +821,32 @@
           [
             107.97191619873048,
             10.933775896510236
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760524968952_9ccrpcmg7",
+        "name": "Vĩnh Hảo - Phan Thiết",
+        "length_km": 0,
+        "status": "Planning"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            107.96951293945314,
+            10.935798432254016
+          ],
+          [
+            108.11920166015626,
+            11.056451345517738
+          ],
+          [
+            108.72117519378664,
+            11.305098594278109
           ]
         ]
       }

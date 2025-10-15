@@ -434,7 +434,6 @@ document.getElementById('addRoadBtn').addEventListener('click', async function()
         type: 'LineString',
         coordinates: [
           [center.lng - 0.1, center.lat - 0.05],
-          [center.lng, center.lat],
           [center.lng + 0.1, center.lat + 0.05]
         ]
       }
