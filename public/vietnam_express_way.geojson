@@ -1111,18 +1111,390 @@
         "id": "road_1760526492605_zcjdrkxuq",
         "name": "Đà Nẵng - Quãng Ngãi",
         "length_km": 0,
-        "status": "Planning"
+        "status": "operational"
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
           [
-            108.14804077148439,
-            15.88737600990871
+            108.14701080322267,
+            16.003658238140833
+          ],
+          [
+            108.15842628479005,
+            15.99441754930516
+          ],
+          [
+            108.19404602050783,
+            15.821984144252534
+          ],
+          [
+            108.37635040283205,
+            15.654775665159686
+          ],
+          [
+            108.44055175781251,
+            15.541683647087643
+          ],
+          [
+            108.51539611816408,
+            15.511581431896381
+          ],
+          [
+            108.57513427734376,
+            15.45235657881628
+          ],
+          [
+            108.72070312500001,
+            15.371598241700955
           ],
           [
             108.74542236328126,
             15.125158878585296
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760534771796_ligyoe29t",
+        "name": "Pháp Vân - Cầu Giẽ",
+        "length_km": 0,
+        "status": "operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            105.91781616210939,
+            21.00247105435674
+          ],
+          [
+            105.91867446899414,
+            20.70409642032922
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760534886108_vydmbcekw",
+        "name": "Cầu Giẽ - Ninh Bình",
+        "length_km": 0,
+        "status": "operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            105.91781616210939,
+            20.703454117881538
+          ],
+          [
+            106.0115432739258,
+            20.292066902000865
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760534955832_pj3m22dr0",
+        "name": "Cao Bồ - Mai Sơn",
+        "length_km": 0,
+        "status": "operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.01153790950777,
+            20.292074449229602
+          ],
+          [
+            105.95424056053162,
+            20.187568028715184
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760535053255_b4g4e1k51",
+        "name": "Mai Sơn - QL 45",
+        "length_km": 0,
+        "status": "operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            105.95360755920412,
+            20.187618377413944
+          ],
+          [
+            105.67319869995119,
+            19.757172014339574
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760535204487_zmtiy0udr",
+        "name": "QL 45 - Nghi Sơn",
+        "length_km": 0,
+        "status": "operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            105.67199707031251,
+            19.759595340557695
+          ],
+          [
+            105.69504261016847,
+            19.367105849680204
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760535269240_uvlw8izxc",
+        "name": "Nghi Sơn - Diễn Châu",
+        "length_km": 0,
+        "status": "operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            105.69465637207033,
+            19.368158505739146
+          ],
+          [
+            105.56183338165285,
+            18.967601625310685
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760535284012_3jnpldzo1",
+        "name": "Diễn Châu - Bãi Vọt",
+        "length_km": 0,
+        "status": "operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            105.55114746093751,
+            18.981623204500767
+          ],
+          [
+            105.65453052520753,
+            18.534060316647516
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760535440566_z0t1q43z6",
+        "name": "Bãi Vọt - Hàm Nghi",
+        "length_km": 0,
+        "status": "operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            105.65277099609375,
+            18.535606511943122
+          ],
+          [
+            105.827693939209,
+            18.33236585699732
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760535521816_99gnmx8js",
+        "name": "Hàm Nghi - Vũng Áng",
+        "length_km": 0,
+        "status": "operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            105.827693939209,
+            18.332488068862364
+          ],
+          [
+            106.25667572021486,
+            18.045991358341276
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760535658970_wrak2z4ab",
+        "name": "Vũng Áng - Bùng",
+        "length_km": 0,
+        "status": "operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.25701904296876,
+            18.049255668808147
+          ],
+          [
+            106.40919685363771,
+            17.59870298488862
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760535710529_vlnmi2a3p",
+        "name": "Bùng - Vạn Ninh",
+        "length_km": 0,
+        "status": "operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.40808105468751,
+            17.60475708972717
+          ],
+          [
+            106.65420055389406,
+            17.264637765757378
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760535756953_1oxdheay5",
+        "name": "Vạn Ninh - Cam Lộ",
+        "length_km": 0,
+        "status": "operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            106.65321350097656,
+            17.264760710987645
+          ],
+          [
+            106.67861938476564,
+            17.23098867464777
+          ],
+          [
+            106.6981887817383,
+            17.21369040998984
+          ],
+          [
+            106.71672821044922,
+            17.20049017168178
+          ],
+          [
+            106.74041748046876,
+            17.172938816276908
+          ],
+          [
+            106.80633544921876,
+            17.09485442464107
+          ],
+          [
+            106.90795898437501,
+            17.0252726853768
+          ],
+          [
+            106.9906997680664,
+            16.877161390409334
+          ],
+          [
+            107.01919555664064,
+            16.805855718630408
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760535778558_kwgqghgay",
+        "name": "Cam Lộ - La Sơn",
+        "length_km": 0,
+        "status": "operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            107.0200538635254,
+            16.808402812057746
+          ],
+          [
+            107.08648681640626,
+            16.6875015056279
+          ],
+          [
+            107.34054565429689,
+            16.515099441440785
+          ],
+          [
+            107.71275043487549,
+            16.315073492553154
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "road_1760536010458_z7c58uesr",
+        "name": "La Sơn - Túy Loan",
+        "length_km": 0,
+        "status": "operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            107.72644042968751,
+            16.309595517742196
+          ],
+          [
+            108.12744140625001,
+            16.024695711685315
           ]
         ]
       }

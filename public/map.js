@@ -127,21 +127,21 @@ async function loadExpresswayData() {
           // Start point circle (green)
           const startPoint = coords[0];
           L.circleMarker([startPoint[1], startPoint[0]], {
-            radius: 2,
+            radius: 3,
             color: '#0358ebff',
             fillColor: '#0358ebff',
             fillOpacity: 0.8,
-            weight: 2
+            weight: 4
           }).addTo(map).bindTooltip('Start', { permanent: false, direction: 'top' });
 
           // End point circle (red)
           const endPoint = coords[coords.length - 1];
           L.circleMarker([endPoint[1], endPoint[0]], {
-            radius: 2,
+            radius: 3,
             color: '#0358ebff',
             fillColor: '#0358ebff',
             fillOpacity: 0.8,
-            weight: 2
+            weight: 4
           }).addTo(map).bindTooltip('End', { permanent: false, direction: 'top' });
         }
 
