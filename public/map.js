@@ -103,6 +103,36 @@ async function loadExpresswayData() {
           );
         }
 
+        // Add circles for start and end points
+        let coords = [];
+        if (feature.geometry.type === 'LineString') {
+          coords = feature.geometry.coordinates;
+        } else if (feature.geometry.type === 'MultiLineString') {
+          coords = feature.geometry.coordinates[0];
+        }
+
+        if (coords.length > 0) {
+          // Start point circle (green)
+          const startPoint = coords[0];
+          L.circleMarker([startPoint[1], startPoint[0]], {
+            radius: 5,
+            color: '#0358ebff',
+            fillColor: '#0358ebff',
+            fillOpacity: 0.8,
+            weight: 2
+          }).addTo(map).bindTooltip('Start', { permanent: false, direction: 'top' });
+
+          // End point circle (red)
+          const endPoint = coords[coords.length - 1];
+          L.circleMarker([endPoint[1], endPoint[0]], {
+            radius: 5,
+            color: '#0358ebff',
+            fillColor: '#0358ebff',
+            fillOpacity: 0.8,
+            weight: 2
+          }).addTo(map).bindTooltip('End', { permanent: false, direction: 'top' });
+        }
+
         // Add click handler to enter edit mode
         layer.on('click', function(e) {
           L.DomEvent.stopPropagation(e);
