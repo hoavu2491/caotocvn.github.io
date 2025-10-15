@@ -161,15 +161,18 @@ function enterEditMode(feature, layer) {
     opacity: 0.8
   }).addTo(map);
 
-  // Create draggable circle markers for each coordinate
+  // Create draggable markers for each coordinate
   coords.forEach((coord, index) => {
-    const marker = L.circleMarker([coord[1], coord[0]], {
-      radius: 6,
-      fillColor: '#e74c3c',
-      color: '#fff',
-      weight: 2,
-      opacity: 1,
-      fillOpacity: 0.8,
+    // Create a custom divIcon for circular appearance
+    const icon = L.divIcon({
+      className: 'edit-marker',
+      html: '<div style="width: 12px; height: 12px; background-color: #e74c3c; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>',
+      iconSize: [12, 12],
+      iconAnchor: [6, 6]
+    });
+
+    const marker = L.marker([coord[1], coord[0]], {
+      icon: icon,
       draggable: true
     }).addTo(map);
 
@@ -276,20 +279,6 @@ map.addLayer(drawnItems);
 let currentPolyline = null;
 let drawnCoordinates = [];
 
-// Draw button
-document.getElementById('drawBtn').addEventListener('click', function() {
-  isDrawing = !isDrawing;
-  this.textContent = isDrawing ? 'Stop Drawing' : 'Draw';
-  this.style.backgroundColor = isDrawing ? '#e74c3c' : '';
-
-  if (isDrawing) {
-    drawnCoordinates = [];
-    currentPolyline = null;
-    map.getContainer().style.cursor = 'crosshair';
-  } else {
-    map.getContainer().style.cursor = '';
-  }
-});
 
 // Map click handler for drawing
 map.on('click', function(e) {
@@ -311,32 +300,36 @@ map.on('click', function(e) {
   drawnItems.addLayer(currentPolyline);
 });
 
-// Clear button
-document.getElementById('clearBtn').addEventListener('click', function() {
-  drawnItems.clearLayers();
-  drawnCoordinates = [];
-  currentPolyline = null;
-  if (isDrawing) {
-    isDrawing = false;
-    document.getElementById('drawBtn').textContent = 'Draw';
-    document.getElementById('drawBtn').style.backgroundColor = '';
-    map.getContainer().style.cursor = '';
-  }
-});
-
 // Copy Coordinates button
 document.getElementById('copyBtn').addEventListener('click', function() {
-  if (drawnCoordinates.length === 0) {
-    showInfoMessage('No coordinates to copy. Draw on the map first.', 'error');
+  console.log('Copy button clicked');
+  let coordinatesToCopy = [];
+  let source = '';
+
+  // Check if we're in edit mode
+  if (isEditMode && editingFeature) {
+    const coords = editingFeature.geometry.type === 'LineString'
+      ? editingFeature.geometry.coordinates
+      : editingFeature.geometry.coordinates[0];
+    coordinatesToCopy = coords;
+    source = editingFeature.properties.name || 'Edited road';
+  }
+  // Otherwise check drawn coordinates
+  else if (drawnCoordinates.length > 0) {
+    coordinatesToCopy = drawnCoordinates;
+    source = 'Drawn line';
+  }
+  // No coordinates available
+  else {
+    alert('No coordinates to copy. Draw on the map or edit a road first.', 'error');
     return;
   }
 
-  const coordinatesText = JSON.stringify(drawnCoordinates, null, 2);
+  const coordinatesText = JSON.stringify(coordinatesToCopy, null, 2);
 
   navigator.clipboard.writeText(coordinatesText).then(() => {
-    showInfoMessage('Coordinates copied to clipboard!', 'success');
+    alert(`Coordinates from "${source}" copied to clipboard!`, 'success');
   }).catch(err => {
-    console.error('Failed to copy coordinates:', err);
-    showInfoMessage('Failed to copy coordinates. Check console for details.', 'error');
+    alert('Failed to copy coordinates. Check console for details.', 'error');
   });
 });
