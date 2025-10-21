@@ -316,14 +316,9 @@ function enterEditMode(feature, layer) {
   showInfoMessage(
     `Edit mode: ${
       feature.properties.name || "Expressway"
-    }. Click line to add point, drag points to move, right-click to remove, click map to exit.`,
+    }. Click line to add point, drag points to move, right-click to remove.`,
     "info"
   );
-
-  // Add click handler to exit edit mode
-  map.once("click", function () {
-    exitEditMode();
-  });
 }
 
 function insertPointOnLine(latlng) {
