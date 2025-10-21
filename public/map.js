@@ -1,28 +1,28 @@
 // Initialize the map centered on Vietnam
 const map = L.map("map", {
   zoomDelta: 0.25,
-  zoomSnap: 0.25
+  zoomSnap: 0.25,
 }).setView([16.0, 107.0], 6);
 
 // Helper function to show messages in info panel
-function showInfoMessage(message, type = 'info') {
-  const messageDiv = document.getElementById('info-message');
+function showInfoMessage(message, type = "info") {
+  const messageDiv = document.getElementById("info-message");
   messageDiv.textContent = message;
-  messageDiv.style.display = 'block';
+  messageDiv.style.display = "block";
 
   // Set color based on type
-  if (type === 'success') {
-    messageDiv.style.backgroundColor = '#d4edda';
-    messageDiv.style.color = '#155724';
-    messageDiv.style.border = '1px solid #c3e6cb';
-  } else if (type === 'error') {
-    messageDiv.style.backgroundColor = '#f8d7da';
-    messageDiv.style.color = '#721c24';
-    messageDiv.style.border = '1px solid #f5c6cb';
+  if (type === "success") {
+    messageDiv.style.backgroundColor = "#d4edda";
+    messageDiv.style.color = "#155724";
+    messageDiv.style.border = "1px solid #c3e6cb";
+  } else if (type === "error") {
+    messageDiv.style.backgroundColor = "#f8d7da";
+    messageDiv.style.color = "#721c24";
+    messageDiv.style.border = "1px solid #f5c6cb";
   } else {
-    messageDiv.style.backgroundColor = '#d1ecf1';
-    messageDiv.style.color = '#0c5460';
-    messageDiv.style.border = '1px solid #bee5eb';
+    messageDiv.style.backgroundColor = "#d1ecf1";
+    messageDiv.style.color = "#0c5460";
+    messageDiv.style.border = "1px solid #bee5eb";
   }
 
   // Auto-hide after 3 seconds
@@ -32,13 +32,17 @@ function showInfoMessage(message, type = 'info') {
 }
 
 // Add OpenStreetMap tile layer
-const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 19
-}).addTo(map);
+const osmLayer = L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19,
+  }
+).addTo(map);
 
 // Toggle OpenStreetMap layer
-document.getElementById('osmToggle').addEventListener('change', function(e) {
+document.getElementById("osmToggle").addEventListener("change", function (e) {
   if (e.target.checked) {
     map.addLayer(osmLayer);
   } else {
@@ -94,11 +98,16 @@ async function loadExpresswayData() {
       style: (feature) => {
         // Set color based on status
         let color = "#08a64aff"; // Default green for operational
-        const status = feature.properties.status ? feature.properties.status.toLowerCase() : '';
+        const status = feature.properties.status
+          ? feature.properties.status.toLowerCase()
+          : "";
 
-        if (status === 'planning') {
+        if (status === "planning") {
           color = "#ffc107"; // Yellow for planning
-        } else if (status === 'construction' || status === 'under construction') {
+        } else if (
+          status === "construction" ||
+          status === "under construction"
+        ) {
           color = "#ff9800"; // Orange for construction
         }
 
@@ -120,9 +129,9 @@ async function loadExpresswayData() {
 
         // Add circles for start and end points and road name label
         let coords = [];
-        if (feature.geometry.type === 'LineString') {
+        if (feature.geometry.type === "LineString") {
           coords = feature.geometry.coordinates;
-        } else if (feature.geometry.type === 'MultiLineString') {
+        } else if (feature.geometry.type === "MultiLineString") {
           coords = feature.geometry.coordinates[0];
         }
 
@@ -131,21 +140,25 @@ async function loadExpresswayData() {
           const startPoint = coords[0];
           L.circleMarker([startPoint[1], startPoint[0]], {
             radius: 2.5,
-            color: '#0358ebff',
-            fillColor: '#0358ebff',
+            color: "#0358ebff",
+            fillColor: "#0358ebff",
             fillOpacity: 0.8,
-            weight: 4
-          }).addTo(map).bindTooltip('Start', { permanent: false, direction: 'top' });
+            weight: 4,
+          })
+            .addTo(map)
+            .bindTooltip("Start", { permanent: false, direction: "top" });
 
           // End point circle (red)
           const endPoint = coords[coords.length - 1];
           L.circleMarker([endPoint[1], endPoint[0]], {
             radius: 2.5,
-            color: '#0358ebff',
-            fillColor: '#0358ebff',
+            color: "#0358ebff",
+            fillColor: "#0358ebff",
             fillOpacity: 0.8,
-            weight: 4
-          }).addTo(map).bindTooltip('End', { permanent: false, direction: 'top' });
+            weight: 4,
+          })
+            .addTo(map)
+            .bindTooltip("End", { permanent: false, direction: "top" });
 
           // Add road name label at the center-right of the road
           const midIndex = Math.floor(coords.length / 2);
@@ -154,15 +167,15 @@ async function loadExpresswayData() {
 
           L.marker([midPoint[1], midPoint[0]], {
             icon: L.divIcon({
-              className: 'road-name-label',
+              className: "road-name-label",
               html: `<div style="font-size: 12px; white-space: nowrap;">${roadName}</div>`,
-              iconAnchor: [-10, 0]
-            })
+              iconAnchor: [-10, 0],
+            }),
           }).addTo(map);
         }
 
         // Add click handler to enter edit mode
-        layer.on('click', function(e) {
+        layer.on("click", function (e) {
           L.DomEvent.stopPropagation(e);
           enterEditMode(feature, layer);
         });
@@ -172,16 +185,6 @@ async function loadExpresswayData() {
     console.error("Error loading expressway data:", error);
   }
 }
-
-async function loadAll(){
-  // Load provinces when the page is ready
-  await loadVietnamProvinces();
-
-  // Load provinces when the page is ready
-  await loadExpresswayData();
-}
-
-loadAll();
 
 // Edit mode functions
 function enterEditMode(feature, layer) {
@@ -194,14 +197,16 @@ function enterEditMode(feature, layer) {
 
   // Ensure the feature has a unique ID
   if (!editingFeature.properties.id) {
-    editingFeature.properties.id = `road_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+    editingFeature.properties.id = `road_${Date.now()}_${Math.random()
+      .toString(36)
+      .substring(2, 11)}`;
   }
 
   // Get coordinates from the feature
   let coords = [];
-  if (feature.geometry.type === 'LineString') {
+  if (feature.geometry.type === "LineString") {
     coords = feature.geometry.coordinates;
-  } else if (feature.geometry.type === 'MultiLineString') {
+  } else if (feature.geometry.type === "MultiLineString") {
     coords = feature.geometry.coordinates[0]; // Edit first line for now
   }
 
@@ -209,15 +214,15 @@ function enterEditMode(feature, layer) {
   layer.setStyle({ opacity: 0 });
 
   // Create editable polyline
-  const leafletCoords = coords.map(coord => [coord[1], coord[0]]);
+  const leafletCoords = coords.map((coord) => [coord[1], coord[0]]);
   editPolyline = L.polyline(leafletCoords, {
-    color: '#3498db',
+    color: "#3498db",
     weight: 8,
-    opacity: 0.8
+    opacity: 0.8,
   }).addTo(map);
 
   // Add click handler to polyline to insert new points
-  editPolyline.on('click', function(e) {
+  editPolyline.on("click", function (e) {
     L.DomEvent.stopPropagation(e);
     insertPointOnLine(e.latlng);
   });
@@ -226,27 +231,27 @@ function enterEditMode(feature, layer) {
   coords.forEach((coord, index) => {
     // Create a custom divIcon for circular appearance
     const icon = L.divIcon({
-      className: 'edit-marker',
+      className: "edit-marker",
       html: '<div style="width: 12px; height: 12px; background-color: #e74c3c; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>',
       iconSize: [12, 12],
-      iconAnchor: [6, 6]
+      iconAnchor: [6, 6],
     });
 
     const marker = L.marker([coord[1], coord[0]], {
       icon: icon,
-      draggable: true
+      draggable: true,
     }).addTo(map);
 
     // Store the index with the marker
     marker.coordIndex = index;
 
     // Enable dragging
-    marker.on('drag', function(e) {
+    marker.on("drag", function (e) {
       updateCoordinatePosition(this.coordIndex, e.latlng);
     });
 
     // Remove coordinate on right-click
-    marker.on('contextmenu', function(e) {
+    marker.on("contextmenu", function (e) {
       L.DomEvent.stopPropagation(e);
       removeCoordinate(this.coordIndex);
     });
@@ -254,37 +259,43 @@ function enterEditMode(feature, layer) {
     // Show tooltip
     marker.bindTooltip(`Point ${index + 1}<br>Right-click to remove`, {
       permanent: false,
-      direction: 'top'
+      direction: "top",
     });
 
     editMarkers.push(marker);
   });
 
   // Show edit controls
-  document.getElementById('edit-controls').style.display = 'block';
+  document.getElementById("edit-controls").style.display = "block";
 
   // Populate the road name input field
-  const roadNameInput = document.getElementById('roadNameInput');
-  roadNameInput.value = feature.properties.name || '';
+  const roadNameInput = document.getElementById("roadNameInput");
+  roadNameInput.value = feature.properties.name || "";
 
   // Add event listener to update the feature name when input changes
-  roadNameInput.oninput = function(e) {
+  roadNameInput.oninput = function (e) {
     editingFeature.properties.name = e.target.value;
   };
 
   // Show notification
-  showInfoMessage(`Edit mode: ${feature.properties.name || 'Expressway'}. Click line to add point, drag points to move, right-click to remove, click map to exit.`, 'info');
+  showInfoMessage(
+    `Edit mode: ${
+      feature.properties.name || "Expressway"
+    }. Click line to add point, drag points to move, right-click to remove, click map to exit.`,
+    "info"
+  );
 
   // Add click handler to exit edit mode
-  map.once('click', function() {
+  map.once("click", function () {
     exitEditMode();
   });
 }
 
 function insertPointOnLine(latlng) {
-  const coords = editingFeature.geometry.type === 'LineString'
-    ? editingFeature.geometry.coordinates
-    : editingFeature.geometry.coordinates[0];
+  const coords =
+    editingFeature.geometry.type === "LineString"
+      ? editingFeature.geometry.coordinates
+      : editingFeature.geometry.coordinates[0];
 
   // Find the closest segment to insert the point
   let minDistance = Infinity;
@@ -310,31 +321,31 @@ function insertPointOnLine(latlng) {
 
   // Create new marker for the inserted point
   const icon = L.divIcon({
-    className: 'edit-marker',
+    className: "edit-marker",
     html: '<div style="width: 12px; height: 12px; background-color: #e74c3c; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>',
     iconSize: [12, 12],
-    iconAnchor: [6, 6]
+    iconAnchor: [6, 6],
   });
 
   const marker = L.marker([latlng.lat, latlng.lng], {
     icon: icon,
-    draggable: true
+    draggable: true,
   }).addTo(map);
 
   marker.coordIndex = insertIndex;
 
-  marker.on('drag', function(e) {
+  marker.on("drag", function (e) {
     updateCoordinatePosition(this.coordIndex, e.latlng);
   });
 
-  marker.on('contextmenu', function(e) {
+  marker.on("contextmenu", function (e) {
     L.DomEvent.stopPropagation(e);
     removeCoordinate(this.coordIndex);
   });
 
   marker.bindTooltip(`Point ${insertIndex + 1}<br>Right-click to remove`, {
     permanent: false,
-    direction: 'top'
+    direction: "top",
   });
 
   // Insert the marker at the correct position
@@ -347,32 +358,37 @@ function insertPointOnLine(latlng) {
   });
 
   // Update the polyline
-  const leafletCoords = coords.map(coord => [coord[1], coord[0]]);
+  const leafletCoords = coords.map((coord) => [coord[1], coord[0]]);
   editPolyline.setLatLngs(leafletCoords);
 
-  showInfoMessage('New point added', 'success');
+  showInfoMessage("New point added", "success");
 }
 
 function updateCoordinatePosition(index, latlng) {
   // Update the coordinate in the feature
-  const coords = editingFeature.geometry.type === 'LineString'
-    ? editingFeature.geometry.coordinates
-    : editingFeature.geometry.coordinates[0];
+  const coords =
+    editingFeature.geometry.type === "LineString"
+      ? editingFeature.geometry.coordinates
+      : editingFeature.geometry.coordinates[0];
 
   coords[index] = [latlng.lng, latlng.lat];
 
   // Update the polyline
-  const leafletCoords = coords.map(coord => [coord[1], coord[0]]);
+  const leafletCoords = coords.map((coord) => [coord[1], coord[0]]);
   editPolyline.setLatLngs(leafletCoords);
 }
 
 function removeCoordinate(index) {
-  const coords = editingFeature.geometry.type === 'LineString'
-    ? editingFeature.geometry.coordinates
-    : editingFeature.geometry.coordinates[0];
+  const coords =
+    editingFeature.geometry.type === "LineString"
+      ? editingFeature.geometry.coordinates
+      : editingFeature.geometry.coordinates[0];
 
   if (coords.length <= 2) {
-    showInfoMessage('Cannot remove - need at least 2 points for a line', 'error');
+    showInfoMessage(
+      "Cannot remove - need at least 2 points for a line",
+      "error"
+    );
     return;
   }
 
@@ -390,7 +406,7 @@ function removeCoordinate(index) {
   });
 
   // Update the polyline
-  const leafletCoords = coords.map(coord => [coord[1], coord[0]]);
+  const leafletCoords = coords.map((coord) => [coord[1], coord[0]]);
   editPolyline.setLatLngs(leafletCoords);
 }
 
@@ -398,7 +414,7 @@ function exitEditMode() {
   if (!isEditMode) return;
 
   // Remove all edit markers
-  editMarkers.forEach(marker => map.removeLayer(marker));
+  editMarkers.forEach((marker) => map.removeLayer(marker));
   editMarkers = [];
 
   // Remove edit polyline
@@ -413,127 +429,173 @@ function exitEditMode() {
   }
 
   // Hide edit controls
-  document.getElementById('edit-controls').style.display = 'none';
+  document.getElementById("edit-controls").style.display = "none";
 
   isEditMode = false;
   editingLayer = null;
   editingFeature = null;
 }
 
-// Copy Coordinates button
-document.getElementById('copyBtn').addEventListener('click', function() {
-  // Check if we're in edit mode
-  if (isEditMode && editingFeature) {
-    const coords = editingFeature.geometry.type === 'LineString'
-      ? editingFeature.geometry.coordinates
-      : editingFeature.geometry.coordinates[0];
-    const source = editingFeature.properties.name || 'Edited road';
-    const coordinatesText = JSON.stringify(coords, null, 2);
+function setupEditMode() {
+  // Copy Coordinates button
+  document.getElementById("copyBtn").addEventListener("click", function () {
+    // Check if we're in edit mode
+    if (isEditMode && editingFeature) {
+      const coords =
+        editingFeature.geometry.type === "LineString"
+          ? editingFeature.geometry.coordinates
+          : editingFeature.geometry.coordinates[0];
+      const source = editingFeature.properties.name || "Edited road";
+      const coordinatesText = JSON.stringify(coords, null, 2);
 
-    navigator.clipboard.writeText(coordinatesText).then(() => {
-      showInfoMessage(`Coordinates from "${source}" copied to clipboard!`, 'success');
-    }).catch(err => {
-      console.error('Failed to copy coordinates:', err);
-      showInfoMessage('Failed to copy coordinates. Check console for details.', 'error');
-    });
-  } else {
-    showInfoMessage('No road being edited. Click a road to edit it first.', 'error');
-  }
-});
+      navigator.clipboard
+        .writeText(coordinatesText)
+        .then(() => {
+          showInfoMessage(
+            `Coordinates from "${source}" copied to clipboard!`,
+            "success"
+          );
+        })
+        .catch((err) => {
+          console.error("Failed to copy coordinates:", err);
+          showInfoMessage(
+            "Failed to copy coordinates. Check console for details.",
+            "error"
+          );
+        });
+    } else {
+      showInfoMessage(
+        "No road being edited. Click a road to edit it first.",
+        "error"
+      );
+    }
+  });
 
-// Add Road button
-document.getElementById('addRoadBtn').addEventListener('click', async function() {
-  try {
-    showInfoMessage('Creating new road...', 'info');
+  // Add Road button
+  document
+    .getElementById("addRoadBtn")
+    .addEventListener("click", async function () {
+      try {
+        showInfoMessage("Creating new road...", "info");
 
-    // Get the center of the current map view
-    const center = map.getCenter();
+        // Get the center of the current map view
+        const center = map.getCenter();
 
-    // Create a default road with a simple line near the map center
-    const defaultRoad = {
-      type: 'Feature',
-      properties: {
-        id: `road_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
-        name: `New Road ${Date.now()}`,
-        length_km: 0,
-        status: 'Planning'
-      },
-      geometry: {
-        type: 'LineString',
-        coordinates: [
-          [center.lng + 0.1, center.lat + 0.05],
-          [center.lng - 0.1, center.lat - 0.05],
-        ]
+        // Create a default road with a simple line near the map center
+        const defaultRoad = {
+          type: "Feature",
+          properties: {
+            id: `road_${Date.now()}_${Math.random()
+              .toString(36)
+              .substring(2, 11)}`,
+            name: `New Road ${Date.now()}`,
+            length_km: 0,
+            status: "Planning",
+          },
+          geometry: {
+            type: "LineString",
+            coordinates: [
+              [center.lng + 0.1, center.lat + 0.05],
+              [center.lng - 0.1, center.lat - 0.05],
+            ],
+          },
+        };
+
+        // Send the new road to the server
+        const response = await fetch("/api/add-expressway", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            feature: defaultRoad,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            `Server error: ${response.status} ${response.statusText}`
+          );
+        }
+
+        await response.json();
+        showInfoMessage("New road added successfully! Reloading...", "success");
+
+        // Reload the page to show the new road
+        setTimeout(() => {
+          location.reload();
+        }, 1500);
+      } catch (err) {
+        console.error("Failed to add road:", err);
+        showInfoMessage(`Failed to add road: ${err.message}`, "error");
       }
-    };
-
-    // Send the new road to the server
-    const response = await fetch('/api/add-expressway', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        feature: defaultRoad
-      })
     });
 
-    if (!response.ok) {
-      throw new Error(`Server error: ${response.status} ${response.statusText}`);
-    }
+  // Save button
+  document
+    .getElementById("saveBtn")
+    .addEventListener("click", async function () {
+      // Check if we're in edit mode
+      if (!isEditMode || !editingFeature) {
+        showInfoMessage(
+          "No road being edited. Click a road to edit it first.",
+          "error"
+        );
+        return;
+      }
 
-    await response.json();
-    showInfoMessage('New road added successfully! Reloading...', 'success');
+      try {
+        showInfoMessage("Saving changes...", "info");
 
-    // Reload the page to show the new road
-    setTimeout(() => {
-      location.reload();
-    }, 1500);
+        // Send the updated feature to the server
+        const response = await fetch("/api/update-expressway", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            feature: editingFeature,
+          }),
+        });
 
-  } catch (err) {
-    console.error('Failed to add road:', err);
-    showInfoMessage(`Failed to add road: ${err.message}`, 'error');
-  }
-});
+        if (!response.ok) {
+          throw new Error(
+            `Server error: ${response.status} ${response.statusText}`
+          );
+        }
 
-// Save button
-document.getElementById('saveBtn').addEventListener('click', async function() {
-  // Check if we're in edit mode
-  if (!isEditMode || !editingFeature) {
-    showInfoMessage('No road being edited. Click a road to edit it first.', 'error');
-    return;
-  }
+        await response.json();
+        showInfoMessage(
+          `Changes saved successfully for "${
+            editingFeature.properties.name || "Expressway"
+          }"!`,
+          "success"
+        );
 
-  try {
-    showInfoMessage('Saving changes...', 'info');
-
-    // Send the updated feature to the server
-    const response = await fetch('/api/update-expressway', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        feature: editingFeature
-      })
+        // Exit edit mode after successful save
+        setTimeout(() => {
+          exitEditMode();
+          // Reload the expressway data to show the updated version
+          location.reload();
+        }, 1500);
+      } catch (err) {
+        console.error("Failed to save changes:", err);
+        showInfoMessage(`Failed to save: ${err.message}`, "error");
+      }
     });
+}
 
-    if (!response.ok) {
-      throw new Error(`Server error: ${response.status} ${response.statusText}`);
-    }
+async function loadAll() {
+  const isEdit = window.location.href.indexOf("edit") > -1
+  // Load provinces when the page is ready
+  await loadVietnamProvinces();
 
-    await response.json();
-    showInfoMessage(`Changes saved successfully for "${editingFeature.properties.name || 'Expressway'}"!`, 'success');
+  // Load provinces when the page is ready
+  await loadExpresswayData();
 
-    // Exit edit mode after successful save
-    setTimeout(() => {
-      exitEditMode();
-      // Reload the expressway data to show the updated version
-      location.reload();
-    }, 1500);
-
-  } catch (err) {
-    console.error('Failed to save changes:', err);
-    showInfoMessage(`Failed to save: ${err.message}`, 'error');
+  if (isEdit) {
+    setupEditMode();
   }
-});
+}
+
+loadAll();

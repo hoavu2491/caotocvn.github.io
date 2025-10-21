@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Highway Map</title>
+    <title>Expressway Map</title>
 
     <!-- Leaflet CSS -->
     <link
@@ -44,30 +44,6 @@
     </style>
   </head>
   <body>
-    <div class="info-panel" id="info-panel">
-      <h3>Vietnam Map</h3>
-      <p>Province boundaries</p>
-      <label>
-        <input type="checkbox" id="osmToggle" checked />
-        OpenStreetMap Layer
-      </label>
-
-      <div style="margin-top: 15px;">
-        <button id="addRoadBtn" style="width: 100%; background-color: #007bff; color: white; border: none; padding: 8px; cursor: pointer; border-radius: 3px; margin-bottom: 5px;">Add Road</button>
-      </div>
-
-      <div id="edit-controls" style="margin-top: 10px; display: none;">
-        <div style="margin-bottom: 10px;">
-          <label for="roadNameInput" style="display: block; margin-bottom: 5px; font-weight: bold;">Road Name:</label>
-          <input type="text" id="roadNameInput" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 3px; box-sizing: border-box;" placeholder="Enter road name">
-        </div>
-        <button id="copyBtn" style="width: 100%; margin-bottom: 5px;">Copy Coordinates</button>
-        <button id="saveBtn" style="width: 100%; background-color: #28a745; color: white; border: none; padding: 8px; cursor: pointer; border-radius: 3px;">Save Changes</button>
-      </div>
-
-      <div id="info-message" style="margin-top: 15px; padding: 10px; border-radius: 3px; display: none;"></div>
-    </div>
-
     <div id="map"></div>
 
     <!-- Leaflet JS -->
