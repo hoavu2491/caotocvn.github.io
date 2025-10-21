@@ -80,12 +80,16 @@ let editingFeature = null;
 let editMarkers = [];
 let editPolyline = null;
 
+// Layer tracking for refresh functionality
+let expresswayLayers = [];
+let expresswayMarkers = [];
+
 async function loadExpresswayData() {
   try {
     const response = await fetch("vietnam_express_way.geojson");
     const data = await response.json();
 
-    L.geoJSON(data, {
+    const geoJsonLayer = L.geoJSON(data, {
       style: (feature) => {
         // Set color based on status
         let color = "#08a64aff"; // Default green for operational
@@ -129,7 +133,7 @@ async function loadExpresswayData() {
         if (coords.length > 0) {
           // Start point circle (green)
           const startPoint = coords[0];
-          L.circleMarker([startPoint[1], startPoint[0]], {
+          const startMarker = L.circleMarker([startPoint[1], startPoint[0]], {
             radius: 2.5,
             color: "#0358ebff",
             fillColor: "#0358ebff",
@@ -139,9 +143,11 @@ async function loadExpresswayData() {
             .addTo(map)
             .bindTooltip("Start", { permanent: false, direction: "top" });
 
+          expresswayMarkers.push(startMarker);
+
           // End point circle (red)
           const endPoint = coords[coords.length - 1];
-          L.circleMarker([endPoint[1], endPoint[0]], {
+          const endMarker = L.circleMarker([endPoint[1], endPoint[0]], {
             radius: 2.5,
             color: "#0358ebff",
             fillColor: "#0358ebff",
@@ -151,18 +157,22 @@ async function loadExpresswayData() {
             .addTo(map)
             .bindTooltip("End", { permanent: false, direction: "top" });
 
+          expresswayMarkers.push(endMarker);
+
           // Add road name label at the center-right of the road
           const midIndex = Math.floor(coords.length / 2);
           const midPoint = coords[midIndex];
           const roadName = feature.properties.name || "Unknown Expressway";
 
-          L.marker([midPoint[1], midPoint[0]], {
+          const nameMarker = L.marker([midPoint[1], midPoint[0]], {
             icon: L.divIcon({
               className: "road-name-label",
               html: `<div style="font-size: 12px; white-space: nowrap;">${roadName}</div>`,
               iconAnchor: [-10, 0],
             }),
           }).addTo(map);
+
+          expresswayMarkers.push(nameMarker);
         }
 
         // Add click handler to enter edit mode
@@ -172,9 +182,43 @@ async function loadExpresswayData() {
         });
       },
     }).addTo(map);
+
+    // Track the main GeoJSON layer
+    expresswayLayers.push(geoJsonLayer);
   } catch (error) {
     console.error("Error loading expressway data:", error);
   }
+}
+
+// Function to clear all expressway layers and markers
+function clearExpresswayLayers() {
+  // Remove all expressway layers
+  expresswayLayers.forEach(layer => {
+    map.removeLayer(layer);
+  });
+  expresswayLayers = [];
+
+  // Remove all expressway markers
+  expresswayMarkers.forEach(marker => {
+    map.removeLayer(marker);
+  });
+  expresswayMarkers = [];
+}
+
+// Function to refresh expressway data without page reload
+async function refreshExpresswayData() {
+  // Exit edit mode if active
+  if (isEditMode) {
+    exitEditMode();
+  }
+
+  // Clear existing layers
+  clearExpresswayLayers();
+
+  // Reload the data
+  await loadExpresswayData();
+
+  showInfoMessage("Map data refreshed successfully!", "success");
 }
 
 // Edit mode functions
@@ -510,11 +554,11 @@ function setupEditMode() {
         }
 
         await response.json();
-        showInfoMessage("New road added successfully! Reloading...", "success");
+        showInfoMessage("New road added successfully! Refreshing map...", "success");
 
-        // Reload the page to show the new road
-        setTimeout(() => {
-          location.reload();
+        // Refresh the map data without reloading the page
+        setTimeout(async () => {
+          await refreshExpresswayData();
         }, 1500);
       } catch (err) {
         console.error("Failed to add road:", err);
@@ -563,11 +607,9 @@ function setupEditMode() {
           "success"
         );
 
-        // Exit edit mode after successful save
-        setTimeout(() => {
-          exitEditMode();
-          // Reload the expressway data to show the updated version
-          location.reload();
+        // Exit edit mode and refresh the map data
+        setTimeout(async () => {
+          await refreshExpresswayData();
         }, 1500);
       } catch (err) {
         console.error("Failed to save changes:", err);
