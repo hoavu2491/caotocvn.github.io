@@ -39,16 +39,7 @@ const osmLayer = L.tileLayer(
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     maxZoom: 19,
   }
-).addTo(map);
-
-// Toggle OpenStreetMap layer
-document.getElementById("osmToggle").addEventListener("change", function (e) {
-  if (e.target.checked) {
-    map.addLayer(osmLayer);
-  } else {
-    map.removeLayer(osmLayer);
-  }
-});
+);
 
 // Fetch and display Vietnam province boundaries
 async function loadVietnamProvinces() {
@@ -120,10 +111,10 @@ async function loadExpresswayData() {
       onEachFeature: (feature, layer) => {
         if (feature.properties) {
           const name = feature.properties.name || "Unknown Expressway";
-          const length = feature.properties.length_km || "N/A";
-          const status = feature.properties.status || "Unknown";
           layer.bindPopup(
-            `<b>${name}</b><br>Length: ${length} km<br>Status: ${status}`
+            `
+            <b>${name}</b>
+            `
           );
         }
 
@@ -583,10 +574,19 @@ function setupEditMode() {
         showInfoMessage(`Failed to save: ${err.message}`, "error");
       }
     });
+
+  // Toggle OpenStreetMap layer
+  document.getElementById("osmToggle").addEventListener("change", function (e) {
+    if (e.target.checked) {
+      map.addLayer(osmLayer);
+    } else {
+      map.removeLayer(osmLayer);
+    }
+  });
 }
 
 async function loadAll() {
-  const isEdit = window.location.href.indexOf("edit") > -1
+  const isEdit = window.location.href.indexOf("edit") > -1;
   // Load provinces when the page is ready
   await loadVietnamProvinces();
 
@@ -594,6 +594,7 @@ async function loadAll() {
   await loadExpresswayData();
 
   if (isEdit) {
+    map.addLayer(osmLayer);
     setupEditMode();
   }
 }
